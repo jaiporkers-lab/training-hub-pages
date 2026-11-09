@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Training Hub is a personal macOS training log for multisport FIT analysis, comparisons and Garmin Personal API sync.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <meta name="color-scheme" content="light">
+  <title>Training Hub — A closer look at your training</title>
+  <style>
+    :root { --ink: #172522; --muted: #52625b; --paper: #f6f5ec; --line: #d4d9ce; --forest: #122d27; --lime: #ddf990; --white: #fffef7; --radius: 1.2rem; font: 100%/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--paper); }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: inherit; text-underline-offset: .23em; }
+    a:hover { text-decoration-thickness: .14em; }
+    a:focus-visible { outline: 3px solid #4a8a6a; outline-offset: 5px; border-radius: .16rem; }
+    .skip { position: absolute; left: 1rem; top: -6rem; padding: .6rem 1rem; background: var(--white); z-index: 1; }
+    .skip:focus { top: .5rem; }
+    .wrap { width: min(72rem, calc(100% - 3rem)); margin: 0 auto; }
+    header { border-bottom: 1px solid var(--line); }
+    nav { min-height: 4.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; }
+    nav a { text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    .brand { display: inline-flex; gap: .65rem; align-items: center; font-weight: 750; letter-spacing: -.03em; }
+    .brand-mark { display: grid; place-items: center; width: 2.3rem; aspect-ratio: 1; border-radius: 50%; color: var(--lime); background: var(--forest); }
+    .links { display: flex; flex-wrap: wrap; gap: clamp(.65rem, 3vw, 1.75rem); font-size: .9rem; }
+    .hero { display: grid; grid-template-columns: .93fr 1.07fr; align-items: center; gap: clamp(2rem, 5vw, 5rem); padding: clamp(3rem, 8vw, 7.75rem) 0; }
+    .eyebrow { margin: 0 0 .65rem; font-size: .74rem; font-weight: 720; letter-spacing: .13em; text-transform: uppercase; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(2.75rem, 6.15vw, 5.8rem); line-height: .98; letter-spacing: -.055em; word-spacing: .025em; font-weight: 780; max-width: 11ch; }
+    h2 { font-size: clamp(2.05rem, 4.4vw, 3.8rem); line-height: 1.02; letter-spacing: -.045em; font-weight: 760; }
+    h3 { font-size: 1.15rem; letter-spacing: -.024em; line-height: 1.25; }
+    .lede { margin-top: 1.45rem; color: var(--muted); font-size: clamp(1.02rem, 2vw, 1.2rem); max-width: 42ch; }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem; margin-top: 1.7rem; }
+    .button { display: inline-block; background: var(--forest); color: var(--white); padding: .7rem 1.05rem; text-decoration: none; border-radius: .45rem; font-weight: 680; }
+    .button:hover { background: #214539; }
+    .build { font-size: .88rem; color: var(--muted); }
+    figure { margin: 0; min-width: 0; }
+    .board { color: var(--white); background: var(--forest); border-radius: var(--radius); padding: clamp(1.05rem, 3vw, 1.75rem); box-shadow: 0 18px 44px #142d231f; }
+    .board-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+    .board h2 { font-size: clamp(1.25rem, 3vw, 1.9rem); letter-spacing: -.045em; }
+    .board .eyebrow, .board small { color: #b9cfc0; }
+    .board small { font-size: .75rem; }
+    .badge { color: var(--lime); padding: .2rem .48rem; border: 1px solid #789672; border-radius: .35rem; white-space: nowrap; font-size: .72rem; }
+    .chart { width: 100%; height: auto; display: block; margin-top: 1rem; }
+    .legs { margin: .5rem 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr .65fr 1.6fr .65fr 1fr; gap: 3px; }
+    .legs li { text-align: center; font-weight: 650; font-size: .72rem; padding: .28rem .1rem; background: #2c4d41; color: #e9f4ec; border-radius: .2rem; }
+    .legs li:nth-child(3) { background: var(--lime); color: var(--ink); }
+    figcaption { color: var(--muted); font-size: .78rem; margin: .65rem .1rem 0; }
+    .band { padding: clamp(2.75rem, 6vw, 5.4rem) 0; border-top: 1px solid var(--line); }
+    .intro { color: var(--muted); max-width: 61ch; margin-top: .85rem; }
+    .features { margin-top: 1.9rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 1.6rem; row-gap: 1.4rem; }
+    .feature { border-top: 1px solid var(--line); padding-top: 1rem; }
+    .number { color: #3e6755; font: 650 .75rem/1.5 ui-monospace, monospace; margin-bottom: .55rem; }
+    .feature p, .notes p { color: var(--muted); margin-top: .45rem; font-size: .96rem; }
+    .security { background: var(--forest); color: var(--white); border: 0; }
+    .security .eyebrow { color: var(--lime); }
+    .security .intro, .security p { color: #cbddd2; }
+    .evidence { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1.65rem; margin: 1.7rem 0 0; }
+    .evidence div { border-top: 1px solid #537164; padding: .9rem 0 1rem; }
+    dt { color: var(--lime); font-weight: 690; }
+    dd { margin: .35rem 0 0; color: #e4efe7; font-size: .94rem; }
+    .limits { border-left: 2px solid var(--lime); padding-left: .9rem; margin-top: .8rem; max-width: 72ch; }
+    .limits strong { color: var(--white); }
+    .notes { display: grid; grid-template-columns: .8fr 1.2fr; gap: 1.5rem 3rem; }
+    .notes h3:not(:first-child) { margin-top: 1.3rem; }
+    footer { padding: 1.4rem 0 2rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .83rem; }
+    @media (max-width: 53rem) {
+      .hero { grid-template-columns: 1fr; }
+      h1 { max-width: 14ch; }
+      figure { max-width: 38rem; }
+    }
+    @media (max-width: 41rem) {
+      .wrap { width: calc(100% - 2rem); }
+      nav { padding: .7rem 0; align-items: flex-start; flex-direction: column; gap: .45rem; }
+      .features, .evidence, .notes { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header id="top">
+    <nav class="wrap" aria-label="Main">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true"><svg width="21" height="16" viewBox="0 0 21 16" fill="none"><path d="M1 12h4l3-8 3 9 3-6 2 5h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        Training Hub
+      </a>
+      <div class="links">
+        <a href="#features">Features</a>
+        <a href="#security">Security</a>
+        <a href="#project">Project notes</a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="wrap hero" aria-labelledby="title">
+      <div>
+        <p class="eyebrow">Personal training log · macOS</p>
+        <h1 id="title">A closer look at your training.</h1>
+        <p class="lede">Open an entire triathlon, inspect a single leg, or compare two efforts side by side. Training Hub keeps your library and analysis on your Mac.</p>
+        <div class="actions"><a class="button" href="#features">Explore the app</a><span class="build">Personal build · v0.6.0</span></div>
+      </div>
+      <figure>
+        <div class="board">
+          <div class="board-top">
+            <div><p class="eyebrow">Multisport analysis</p><h2>Coastal sprint</h2><small>Heart rate · elapsed time</small></div>
+            <span class="badge">Illustration</span>
+          </div>
+          <svg class="chart" viewBox="0 0 504 194" role="img" aria-label="Illustrated race chart. A cursor in the bike leg shows a heart rate of 160 beats per minute at 30 minutes.">
+            <defs><linearGradient id="wash" x2="0" y2="1"><stop stop-color="#ddf990" stop-opacity=".25"/><stop offset="1" stop-color="#ddf990" stop-opacity="0"/></linearGradient></defs>
+            <path d="M37 30h456M37 70h456M37 110h456M37 150h456" stroke="#527166" fill="none"/>
+            <path d="M116 30v120M144 30v120M348 30v120M371 30v120" stroke="#78958a" stroke-dasharray="3 5" fill="none"/>
+            <g fill="#c9ded1" font-size="12" font-family="system-ui,sans-serif">
+              <text x="6" y="34">180</text><text x="6" y="74">160</text><text x="6" y="114">140</text><text x="6" y="154">120</text>
+              <text x="37" y="178">0 min</text><text x="177" y="178">20</text><text x="328" y="178">40</text><text x="478" y="178">60</text>
+            </g>
+            <path d="M37 140l11-17 8 4 11-28 9 9 11-17 12 9 9-14 8 13 11-6 9 12 8-6 11-12 9 3 9-16 11 8 8-11 11 8 12-8 11 6 10-8 11 9 11-4 9-3 10 6 13-10 10-4 11 11 12-12 9 6 12-13 10 4 13 27 10-10 10-10 10-18 8 5 11-12 11 8 12-13 12 6 10-10 11 3 10-11 13 8 9-4v106H37z" fill="url(#wash)"/>
+            <path d="M37 140l11-17 8 4 11-28 9 9 11-17 12 9 9-14 8 13 11-6 9 12 8-6 11-12 9 3 9-16 11 8 8-11 11 8 12-8 11 6 10-8 11 9 11-4 9-3 10 6 13-10 10-4 11 11 12-12 9 6 12-13 10 4 13 27 10-10 10-10 10-18 8 5 11-12 11 8 12-13 12 6 10-10 11 3 10-11 13 8 9-4" stroke="#ddf990" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M267 32v118" stroke="#ddf990" stroke-opacity=".8" />
+            <circle cx="267" cy="71" r="4" fill="#ddf990"/>
+            <rect x="222" y="7" width="99" height="27" rx="5" fill="#ddf990"/>
+            <text x="271" y="25" fill="#172522" font-family="system-ui,sans-serif" font-size="12" font-weight="700" text-anchor="middle">Bike · 160 bpm</text>
+          </svg>
+          <ol class="legs" aria-label="Race legs"><li>Swim</li><li>T1</li><li>Bike</li><li>T2</li><li>Run</li></ol>
+        </div>
+        <figcaption>Fictional race data, drawn for this page.</figcaption>
+      </figure>
+    </section>
+
+    <section class="band" id="features" aria-labelledby="feature-title">
+      <div class="wrap">
+        <p class="eyebrow">In the personal build</p>
+        <h2 id="feature-title">From the week to the split.</h2>
+        <p class="intro">Review your week on Home, then open any session and see what your device recorded.</p>
+        <div class="features">
+          <article class="feature"><p class="number">01</p><h3>Multisport activity</h3><p>Expand one race into its swim, bike, run and transitions. Hover over the whole-race chart for the active leg and nearest recorded value.</p></article>
+          <article class="feature"><p class="number">02</p><h3>Detailed analysis</h3><p>Inspect charts by time or distance, zoom into intervals, compare efforts and check custom zones, laps and original FIT fields in All stats.</p></article>
+          <article class="feature"><p class="number">03</p><h3>Pool lengths</h3><p>See individual lengths, stroke counts, rests, pace and calculated SWOLF when the original recording contains the required fields.</p></article>
+          <article class="feature"><p class="number">04</p><h3>Your home and feed</h3><p>Choose dashboard cards, set a weekly time goal, save activity filters and compare training volume by week.</p></article>
+          <article class="feature"><p class="number">05</p><h3>Garmin and health</h3><p>Import FIT files or connect your own Garmin Personal API key for activity history and supported health metrics. Compare health periods with coverage shown.</p></article>
+          <article class="feature"><p class="number">06</p><h3>Export and review</h3><p>Save CSVs or a verified library backup. The offline prompt builder previews a coaching brief for manual copying, with health fields off by default.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band security" id="security" aria-labelledby="security-title">
+      <div class="wrap">
+        <p class="eyebrow">Privacy and security</p>
+        <h2 id="security-title">Controls you can verify.</h2>
+        <p class="intro">Activity and health analysis run on the Mac. The app contacts Garmin when sync is enabled and has no built-in model calls or telemetry. This project page contains no scripts, forms or tracking code.</p>
+        <dl class="evidence">
+          <div><dt>Garmin credentials</dt><dd>The key is stored in macOS Keychain. The client uses a fixed Garmin HTTPS origin with redirects, cookies and response caching disabled. Transport tests check routes, token renewal and rejection of unexpected destinations.</dd></div>
+          <div><dt>Import boundaries</dt><dd>Local FIT reads reject symbolic links, special files and files over 100 MB. ZIP tests cover traversal, decompression limits and CRC checks.</dd></div>
+          <div><dt>Restore safeguards</dt><dd>Restore verifies a private snapshot against the supported SQLite schema, hashes and integrity checks. Regression cases cover a rehashed backup with a trigger and databases that rely on a write-ahead log.</dd></div>
+          <div><dt>Deliberate sharing</dt><dd>Sensor CSV omits GPS. The prompt builder previews the exact brief and copies on request. Tests cover exclusion of credentials, activity titles, GPS and raw streams.</dd></div>
+        </dl>
+        <p class="limits"><strong>Review scope.</strong> The checks are maintained with the app and have had no independent audit. The personal build is ad-hoc signed and has no Apple notarization. The local library and backups use macOS file permissions. Backup checksums detect changes to the supplied files and do not authenticate their author.</p>
+      </div>
+    </section>
+
+    <section class="band" id="project" aria-labelledby="project-title">
+      <div class="wrap notes">
+        <div><p class="eyebrow">Project notes</p><h2 id="project-title">A personal project.</h2></div>
+        <div>
+          <h3>Vibe coded, checked on real recordings</h3>
+          <p>Training Hub is an AI-assisted, vibe-coded SwiftUI project. Development uses small release checkpoints, automated regression tests and hands-on checks on a Mac. Calculations in the shipped app run locally.</p>
+          <h3>Current release and roadmap</h3>
+          <p>Version 0.6 adds pool-length inspection and hardens import and backup restore. The release passed 85 automated tests, including checks with real race, ZIP and pool recordings. Next areas of work include training calendar views, cycling power-duration analysis, running efficiency trends and gear mileage.</p>
+          <h3>Garmin access</h3>
+          <p>Training Hub is an independent project. Sync uses Garmin’s Personal API for the key holder’s own data. This site is a project overview. <a href="https://developer.garmin.com/gc-developer-program/personal/personal-faq">Garmin Personal API FAQ</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap">Training Hub · Personal macOS project · <a href="#top">Back to top</a></div></footer>
+</body>
+</html>
