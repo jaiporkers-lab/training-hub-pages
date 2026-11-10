@@ -1,0 +1,17 @@
+.build/
+.swiftpm/
+.DS_Store
+*.sqlite*
+*.fit
+*.FIT
+*.csv
+*.thbackup/
+build/
+*.app/
+*.dmg
+*.zip
+.env
+.env.*
+*.pem
+*.key
+*.p12
