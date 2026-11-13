@@ -88,7 +88,7 @@
       <div class="links">
         <a href="#features">Features</a>
         <a href="#security">Security</a>
-        <a href="#project">Project notes</a>
+        <a href="#get-started">Get started</a>
       </div>
     </nav>
   </header>
@@ -98,7 +98,12 @@
         <p class="eyebrow">Personal training log · macOS</p>
         <h1 id="title">A closer look at your training.</h1>
         <p class="lede">Open an entire triathlon, inspect a single leg, or compare two efforts side by side. Training Hub keeps your library and analysis on your Mac.</p>
-        <div class="actions"><a class="button" href="#features">Explore the app</a><span class="build">Personal build · v0.6.0</span></div>
+        <div class="actions">
+          <a class="button" href="downloads/Training-Hub-0.8.6-arm64.dmg" download>Download for Mac</a>
+          <a href="https://github.com/jaiporkers-lab/training-hub-pages">View source</a>
+          <span class="build">v0.8.6 · Apple silicon · macOS 14+</span>
+        </div>
+        <p class="build" style="margin-top:.8rem">Open the disk image and drag Training Hub into Applications. This personal build is ad-hoc signed and has no Apple notarisation. <a href="https://github.com/jaiporkers-lab/training-hub-pages/blob/main/docs/BUILDING.md">Build from source</a></p>
       </div>
       <figure>
         <div class="board">
@@ -147,7 +152,7 @@
       <div class="wrap">
         <p class="eyebrow">Privacy and security</p>
         <h2 id="security-title">Controls you can verify.</h2>
-        <p class="intro">Activity and health analysis run on the Mac. The app contacts Garmin when sync is enabled and has no built-in model calls or telemetry. This project page contains no scripts, forms or tracking code.</p>
+          <p class="intro">Activity and health analysis run on the Mac. Garmin sync uses your own key. Apple Maps can receive the viewed area when the street basemap is on. This project page contains no scripts, forms or tracking code.</p>
         <dl class="evidence">
           <div><dt>Garmin credentials</dt><dd>The key is stored in macOS Keychain. The client uses a fixed Garmin HTTPS origin with redirects, cookies and response caching disabled. Transport tests check routes, token renewal and rejection of unexpected destinations.</dd></div>
           <div><dt>Import boundaries</dt><dd>Local FIT reads reject symbolic links, special files and files over 100 MB. ZIP tests cover traversal, decompression limits and CRC checks.</dd></div>
@@ -158,16 +163,16 @@
       </div>
     </section>
 
-    <section class="band" id="project" aria-labelledby="project-title">
+    <section class="band" id="get-started" aria-labelledby="project-title">
       <div class="wrap notes">
         <div><p class="eyebrow">Project notes</p><h2 id="project-title">A personal project.</h2></div>
         <div>
           <h3>Vibe coded, checked on real recordings</h3>
           <p>Training Hub is an AI-assisted, vibe-coded SwiftUI project. Development uses small release checkpoints, automated regression tests and hands-on checks on a Mac. Calculations in the shipped app run locally.</p>
-          <h3>Current release and roadmap</h3>
-          <p>Version 0.6 adds pool-length inspection and hardens import and backup restore. The release passed 85 automated tests, including checks with real race, ZIP and pool recordings. Next areas of work include training calendar views, cycling power-duration analysis, running efficiency trends and gear mileage.</p>
-          <h3>Garmin access</h3>
-          <p>Training Hub is an independent project. Sync uses Garmin’s Personal API for the key holder’s own data. This site is a project overview. <a href="https://developer.garmin.com/gc-developer-program/personal/personal-faq">Garmin Personal API FAQ</a></p>
+          <h3>Build and package on your Mac</h3>
+          <p>Download the Apple silicon build above, or use the repository’s SwiftUI source, tests and packaging scripts to make your own build. <a href="https://github.com/jaiporkers-lab/training-hub-pages/blob/main/docs/BUILDING.md">Read the build guide</a></p>
+          <h3>Connect Garmin on the welcome screen</h3>
+          <p>In Training Hub, open Garmin Personal API settings, sign in and create a key. Paste it into the app’s secure field and select Save &amp; test connection. Training Hub stores a verified key in your Mac’s Keychain. You can also import FIT files directly. <a href="https://developer.garmin.com/gc-developer-program/personal/personal-faq">Garmin Personal API FAQ</a></p>
         </div>
       </div>
     </section>
