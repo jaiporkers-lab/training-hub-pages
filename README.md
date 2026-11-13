@@ -14,6 +14,8 @@ Training Hub is a local-first SwiftUI training log. Import an original FIT recor
 
 ## Get started
 
+Download the [Apple silicon disk image](https://jaiporkers-lab.github.io/training-hub-pages/downloads/Training-Hub-0.8.6-arm64.dmg) for macOS 14 or later, then drag Training Hub into Applications. The build is ad-hoc signed and has no Apple notarisation. See [download checksums](downloads/SHA256SUMS.txt).
+
 Build the app on a Mac with Xcode and Swift 6. The package targets macOS 14 or later. Swift Package Manager fetches the pinned dependencies from their upstream repositories.
 
 ```sh

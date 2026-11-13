@@ -15,6 +15,7 @@ HUB_BIN_DIR="$(swift build --package-path "$HUB_PROJECT_DIR" --scratch-path "$HU
 mkdir -p "$HUB_APP/Contents/MacOS" "$HUB_APP/Contents/Resources" "$HUB_APP/Contents/Frameworks"
 cp "$HUB_BIN_DIR/GarminTrainingHub" "$HUB_APP/Contents/MacOS/GarminTrainingHub"
 install_name_tool -add_rpath '@executable_path/../Frameworks' "$HUB_APP/Contents/MacOS/GarminTrainingHub"
+strip -S "$HUB_APP/Contents/MacOS/GarminTrainingHub"
 xcrun swift-stdlib-tool --copy --scan-executable "$HUB_APP/Contents/MacOS/GarminTrainingHub" --platform macosx --destination "$HUB_APP/Contents/Frameworks" --sign -
 for HUB_SIGNING_BACKUP in "$HUB_APP/Contents/Frameworks/"*.original(N); do
     rm -f "$HUB_SIGNING_BACKUP"
