@@ -10,21 +10,41 @@ struct HomeView: View {
     @AppStorage("dashboard.home.recent") private var showRecent = true
     @AppStorage("dashboard.home.goal") private var showGoal = true
     @AppStorage("dashboard.home.weeklyHours") private var weeklyHours = 0.0
+    @AppStorage("dashboard.home.sport") private var homeSport = ""
+    @AppStorage("dashboard.home.presets") private var presetsJSON = "[]"
+    @State private var presetName = ""
+    @State private var savingPreset = false
+    private var savedPresets: [DashboardLayout] { (try? JSONDecoder().decode([DashboardLayout].self, from: Data(presetsJSON.utf8))) ?? [] }
     var body: some View {
-        let week = TrainingTrends.make(activities: model.activities, weeks: 1)
-        let recent = Array(model.groups.prefix(5))
+        let week = TrainingTrends.make(activities: model.activities, weeks: 1, sport: homeSport.isEmpty ? nil : homeSport)
+        let recent = Array(model.groups.filter { homeSport.isEmpty || $0.sessions.contains { $0.sport == homeSport } }.prefix(5))
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
                 HStack(alignment: .center) {
                     HubEyebrow(Date().formatted(.dateTime.weekday(.wide).day().month(.wide)))
                     Spacer()
                     Menu {
+                        Section("Presets") {
+                            ForEach(DashboardLayout.builtins + savedPresets) { layout in
+                                Button(layout.name) { apply(layout) }
+                            }
+                        }
+                        Button("Save current layout…") { presetName = ""; savingPreset = true }
+                        ForEach(savedPresets) { layout in
+                            Button("Remove \(layout.name)") { savePresets(savedPresets.filter { $0.id != layout.id }) }
+                        }
+                        Divider()
+                        Picker("Sport focus", selection: $homeSport) {
+                            Text("All sports").tag("")
+                            ForEach(["running", "cycling", "swimming", "walking", "hiking"], id: \.self) { Text($0.capitalized).tag($0) }
+                        }
                         Toggle("This week", isOn: $showTraining)
                         Toggle("Health snapshot", isOn: $showHealth)
                         Toggle("Recent activities", isOn: $showRecent)
                         Toggle("Weekly goal", isOn: $showGoal)
                     } label: { Label("Customise Home", systemImage: "slider.horizontal.3") }
                 }
+                if !homeSport.isEmpty { Label("\(homeSport.capitalized) focus", systemImage: sportSymbol(homeSport)).font(.caption).foregroundStyle(HubTheme.accent) }
                 if showRecent, let featured = recent.first {
                     ViewThatFits(in: .horizontal) {
                         HStack(spacing: 24) {
@@ -80,6 +100,7 @@ struct HomeView: View {
                                     }.font(.callout)
                                 }
                             }
+                            Button("Recovery & training trends") { navigate("Recovery") }.buttonStyle(.link)
                             Button("View health comparisons") { navigate("Health") }.buttonStyle(.link)
                             Text("Latest locally saved days; dates may differ by metric.").font(.caption2).foregroundStyle(.secondary)
                         }
@@ -117,6 +138,21 @@ struct HomeView: View {
                 }
             }.padding(.vertical, 12)
         }
+        .alert("Save Home layout", isPresented: $savingPreset) {
+            TextField("Layout name", text: $presetName)
+            Button("Cancel", role: .cancel) {}
+            Button("Save") {
+                let name = presetName.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !name.isEmpty else { return }
+                savePresets(savedPresets + [DashboardLayout(name: String(name.prefix(60)), sport: homeSport, training: showTraining, health: showHealth, recent: showRecent, goal: showGoal)])
+            }
+        }
+    }
+    private func apply(_ layout: DashboardLayout) {
+        homeSport = layout.sport; showTraining = layout.training; showHealth = layout.health; showRecent = layout.recent; showGoal = layout.goal
+    }
+    private func savePresets(_ layouts: [DashboardLayout]) {
+        if let data = try? JSONEncoder().encode(Array(layouts.suffix(30))) { presetsJSON = String(decoding: data, as: UTF8.self) }
     }
     private var introduction: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -149,7 +185,7 @@ struct HomeView: View {
             HStack {
                 HubEyebrow("Latest recording", color: HubTheme.boardMuted)
                 Spacer()
-                Image(systemName: sportSymbol(activity.sport)).foregroundStyle(HubTheme.lime)
+                Image(systemName: sportSymbol(activity.sport)).foregroundStyle(HubTheme.plotPrimary)
             }
             Text(activity.title).font(.title2.bold()).tracking(-0.55)
                 .lineLimit(2).fixedSize(horizontal: false, vertical: true)
@@ -180,13 +216,13 @@ struct HomeView: View {
                     Text(group.isMultisport ? "Open whole activity" : "Open activity")
                     Image(systemName: "arrow.up.right")
                 }.font(.callout.weight(.semibold))
-                    .foregroundStyle(HubTheme.lime)
+                    .foregroundStyle(HubTheme.plotPrimary)
             }.buttonStyle(.plain)
         }
         .foregroundStyle(HubTheme.boardText)
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(HubTheme.forest, in: RoundedRectangle(cornerRadius: 15))
+        .background(HubTheme.boardBackground, in: RoundedRectangle(cornerRadius: 15))
     }
 
     private func featuredValue(_ title: String, _ value: String) -> some View {

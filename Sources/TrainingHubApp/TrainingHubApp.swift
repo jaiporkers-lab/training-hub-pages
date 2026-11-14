@@ -277,16 +277,16 @@ final class HubModel: ObservableObject {
     }
     private func preferencesData() throws -> Data {
         let values = UserDefaults.standard.dictionaryRepresentation().filter { key, _ in
-            ["feed.", "dashboard.", "zones.", "library.", "coach."].contains { key.hasPrefix($0) }
+            ["feed.", "dashboard.", "zones.", "library.", "coach.", "calendar."].contains { key.hasPrefix($0) }
         }
         return try JSONSerialization.data(withJSONObject: values, options: [.sortedKeys])
     }
     private func applyPreferences(_ data: Data) throws {
         guard let values = try JSONSerialization.jsonObject(with: data) as? [String: Any] else { throw HubError.message("Backup preferences could not be read.") }
-        for key in UserDefaults.standard.dictionaryRepresentation().keys where ["feed.", "dashboard.", "zones.", "library.", "coach."].contains(where: { key.hasPrefix($0) }) {
+        for key in UserDefaults.standard.dictionaryRepresentation().keys where ["feed.", "dashboard.", "zones.", "library.", "coach.", "calendar."].contains(where: { key.hasPrefix($0) }) {
             UserDefaults.standard.removeObject(forKey: key)
         }
-        for (key, value) in values where ["feed.", "dashboard.", "zones.", "library.", "coach."].contains(where: { key.hasPrefix($0) }) {
+        for (key, value) in values where ["feed.", "dashboard.", "zones.", "library.", "coach.", "calendar."].contains(where: { key.hasPrefix($0) }) {
             if value is String || value is NSNumber { UserDefaults.standard.set(value, forKey: key) }
         }
     }

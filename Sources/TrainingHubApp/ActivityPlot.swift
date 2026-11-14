@@ -50,7 +50,7 @@ struct ActivityPlot: View {
                     ForEach(Array(group.sessions.indices.dropFirst()), id: \.self) { index in
                         if let position = boundary(index, group: group, activity: activity) {
                             RuleMark(x: .value("Selected leg boundary", position))
-                                .foregroundStyle(HubTheme.lime.opacity(0.43)).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                                .foregroundStyle(HubTheme.plotPrimary.opacity(0.43)).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
                         }
                     }
                 }
@@ -67,7 +67,7 @@ struct ActivityPlot: View {
                         .foregroundStyle(by: .value("Activity", point.series)).lineStyle(StrokeStyle(lineWidth: 1.8))
                 }
             }
-            .chartForegroundStyleScale(["Selected": HubTheme.lime, secondaryLabel: HubTheme.comparison])
+            .chartForegroundStyleScale(["Selected": HubTheme.plotPrimary, secondaryLabel: HubTheme.comparison])
             .chartLegend(comparison.isEmpty ? .hidden : .visible)
             .chartXScale(domain: domain)
             .chartYScale(domain: .automatic(includesZero: metric == .speed || metric == .power))
@@ -90,7 +90,7 @@ struct ActivityPlot: View {
             .chartOverlay { proxy in
                 ChartInspectionOverlay(proxy: proxy, reset: reset) { (position: Double) in
                     Text(String(format: "%.2f %@", position, distanceAxis ? "km" : "min")).bold()
-                    if let label = legLabel(activity: activity, group: group, axis: position) { Text(label).fontWeight(.semibold).foregroundStyle(HubTheme.lime) }
+                    if let label = legLabel(activity: activity, group: group, axis: position) { Text(label).fontWeight(.semibold).foregroundStyle(HubTheme.plotPrimary) }
                     let primary = nearest(samples, index: sampleIndex, position, activity: activity)
                     if comparisonActivity == nil {
                         Text(smoothing > 0 ? "Raw: \(primary)" : primary)

@@ -2,24 +2,24 @@ import AppKit
 import SwiftUI
 
 enum HubTheme {
-    static let paper = adaptive(0xf6f5ec, 0x121e1a)
-    static let sidebar = adaptive(0xeeefe5, 0x17241f)
-    static let surface = adaptive(0xfffef7, 0x1d2d26)
-    static let ink = adaptive(0x172522, 0xf1f5e9)
-    static let muted = adaptive(0x52625b, 0xb0c3b7)
-    static let line = adaptive(0xd4d9ce, 0x3b5147)
-    static let accent = adaptive(0x305c46, 0xddf990)
-    static let selected = adaptive(0x122d27, 0xddf990)
-    static let selectedInk = adaptive(0xfffef7, 0x172522)
-    static let accentWash = adaptive(0xe3ebd9, 0x2c473a)
+    static let background = adaptive(0xf5f7fa, 0x10151e)
+    static let sidebar = adaptive(0xecf0f5, 0x151c27)
+    static let surface = adaptive(0xffffff, 0x1a2330)
+    static let ink = adaptive(0x142034, 0xeff4fc)
+    static let muted = adaptive(0x526477, 0xa9b8cc)
+    static let line = adaptive(0xd4dde8, 0x344254)
+    static let accent = adaptive(0x0876bd, 0x60bcfa)
+    static let selected = adaptive(0x0876bd, 0x168fdc)
+    static let selectedInk = adaptive(0xffffff, 0xffffff)
+    static let accentWash = adaptive(0xe0effa, 0x18354c)
 
-    static let forest = color(0x122d27)
-    static let lime = color(0xddf990)
-    static let boardText = color(0xfffef7)
-    static let boardMuted = color(0xb9cfc0)
-    static let boardLine = color(0x527166)
-    static let boardRaised = color(0x26473b)
-    static let comparison = color(0xf5bc8e)
+    static let boardBackground = color(0x101c2c)
+    static let plotPrimary = color(0x57b8f7)
+    static let boardText = color(0xf0f5fc)
+    static let boardMuted = color(0xa9bcd2)
+    static let boardLine = color(0x3a506b)
+    static let boardRaised = color(0x21364e)
+    static let comparison = color(0xf2b769)
 
     private static func color(_ rgb: UInt32) -> Color { Color(nsColor: nsColor(rgb)) }
 
@@ -86,7 +86,7 @@ struct HubChartBoard<Content: View>: View {
         .foregroundStyle(HubTheme.boardText)
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(HubTheme.forest, in: RoundedRectangle(cornerRadius: 15))
+        .background(HubTheme.boardBackground, in: RoundedRectangle(cornerRadius: 15))
     }
 }
 
@@ -110,20 +110,35 @@ struct HubPillStyle: ButtonStyle {
 
 struct HubBrandMark: View {
     var body: some View {
-        Circle().fill(HubTheme.forest)
-            .overlay {
-                GeometryReader { geometry in
-                    let scale = geometry.size.width / 36
-                    Path { path in
-                        let pulse: [CGPoint] = [
-                            .init(x: 8, y: 22), .init(x: 12, y: 22), .init(x: 15, y: 14),
-                            .init(x: 18, y: 23), .init(x: 21, y: 17), .init(x: 23, y: 22), .init(x: 27, y: 22)
-                        ]
-                        path.addLines(pulse.map { CGPoint(x: $0.x * scale, y: $0.y * scale) })
-                    }.stroke(HubTheme.lime, style: StrokeStyle(lineWidth: 1.8 * scale, lineCap: .round, lineJoin: .round))
-                }
+        GeometryReader { geometry in
+            let size = min(geometry.size.width, geometry.size.height)
+            HStack(spacing: size * 0.025) {
+                Text("G").foregroundStyle(Color.white)
+                Text("H")
+                    .foregroundStyle(Color(red: 9 / 255, green: 23 / 255, blue: 37 / 255))
+                    .frame(width: size * 0.40, height: size * 0.51)
+                    .background(Color(red: 22 / 255, green: 153 / 255, blue: 235 / 255),
+                                in: RoundedRectangle(cornerRadius: size * 0.05))
             }
-            .accessibilityHidden(true)
+            .font(.custom("Arial-BoldMT", size: size * 0.46))
+            .frame(width: size, height: size)
+            .background(Color(red: 17 / 255, green: 24 / 255, blue: 32 / 255),
+                        in: RoundedRectangle(cornerRadius: size * 0.22))
+        }.accessibilityHidden(true)
+    }
+}
+
+struct GarHubWordmark: View {
+    var body: some View {
+        HStack(spacing: 1) {
+            Text("Gar").foregroundStyle(HubTheme.ink)
+            Text("Hub")
+                .foregroundStyle(Color(red: 9 / 255, green: 23 / 255, blue: 37 / 255))
+                .padding(.horizontal, 4).padding(.vertical, 2)
+                .background(Color(red: 22 / 255, green: 153 / 255, blue: 235 / 255),
+                            in: RoundedRectangle(cornerRadius: 4))
+        }.font(.custom("Arial-BoldMT", size: 25)).tracking(-0.8)
+            .accessibilityLabel("GarHub")
     }
 }
 
@@ -131,6 +146,8 @@ enum HubAppearance: String, CaseIterable {
     case system = "Match Mac"
     case paper = "Paper"
     case dark = "Dark"
+
+    var title: String { self == .paper ? "Light" : rawValue }
 
     var scheme: ColorScheme? {
         switch self {

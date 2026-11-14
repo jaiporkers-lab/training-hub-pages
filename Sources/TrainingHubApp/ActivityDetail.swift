@@ -10,6 +10,7 @@ struct ActivityDetail: View {
     let groups: [ActivityGroup]
     let selectActivity: (String) -> Void
     let openRoute: () -> Void
+    var guidedSection: DetailSection? = nil
     @State private var samples: [Sample] = []
     @State private var plotted: [PlotPoint] = []
     @State private var maximumDistance = 0.1
@@ -82,8 +83,13 @@ struct ActivityDetail: View {
                     headlineStat("Avg. power", activity.avgPower.map { number($0, unit: "W") } ?? "—")
                 }.hubPanel(padding: 11)
                 Picker("Analysis", selection: $section) {
-                    ForEach(DetailSection.allCases.filter { $0 != .lengths || activity.sport == "swimming" }) { Text($0.rawValue).tag($0) }
+                    ForEach(DetailSection.allCases.filter {
+                        ($0 != .lengths || activity.sport == "swimming") &&
+                        ($0 != .performance || (!wholeRace && ["running", "cycling"].contains(activity.sport))) &&
+                        ($0 != .route || (!wholeRace && activity.isOutdoorRouteCandidate))
+                    }) { Text($0.rawValue).tag($0) }
                 }.pickerStyle(.segmented).labelsHidden()
+                .overlay(RoundedRectangle(cornerRadius: 7).strokeBorder(guidedSection != nil ? HubTheme.accent : .clear, lineWidth: 2).allowsHitTesting(false))
                 if let lastExport {
                     Button("CSV exported · Show in Finder") { NSWorkspace.shared.activateFileViewerSelecting([lastExport]) }
                         .buttonStyle(.link).font(.caption)
@@ -139,6 +145,10 @@ struct ActivityDetail: View {
                                 .font(.caption).foregroundStyle(.secondary)
                         }.frame(maxWidth: .infinity, alignment: .leading).hubPanel(padding: 14)
                     }
+                } else if section == .performance {
+                    PerformancePanel(activity: activity, samples: samples, all: all, store: store)
+                } else if section == .route {
+                    RouteAnalysisView(activity: activity, samples: samples, all: all, store: store, openActivity: selectActivity)
                 } else if section == .stats {
                     AllStatsView(activity: activity, group: group, store: store)
                 } else if section == .lengths {
@@ -179,6 +189,9 @@ struct ActivityDetail: View {
                 rebuildPlot(reindex: true)
                 error = nil
             } catch { if !Task.isCancelled { self.error = error.localizedDescription } }
+        }
+        .onChange(of: guidedSection, initial: true) {
+            if let guidedSection { section = guidedSection }
         }
         .onChange(of: metric) { rebuildPlot() }
         .onChange(of: smoothing) { rebuildPlot() }

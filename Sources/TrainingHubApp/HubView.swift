@@ -5,6 +5,7 @@ import TrainingHubCore
 struct HubView: View {
     @ObservedObject var model: HubModel
     @State private var page = "Home"
+    @State private var tourStep: AppTourStep?
     @State private var routeFocus = ""
     @State private var showingWalkthrough = false
     @State private var welcomeReason: WelcomeReason?
@@ -56,7 +57,7 @@ struct HubView: View {
                     HStack(spacing: 10) {
                         HubBrandMark().frame(width: 34, height: 34)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Training Hub").font(.system(size: 18, weight: .bold)).tracking(-0.5)
+                            GarHubWordmark()
                             HubEyebrow("Personal training log")
                         }
                     }
@@ -64,7 +65,7 @@ struct HubView: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Training Hub logo · Home")
+                .accessibilityLabel("GarHub logo · Home")
                 .help("Go Home")
                 .padding(.top, 14)
                 Button { page = "Home" } label: {
@@ -155,6 +156,9 @@ struct HubView: View {
                             workspaceButton("Home", page: "Home")
                             workspaceButton("Activities", page: "Activities")
                             workspaceButton("Training trends", page: "Trends")
+                            workspaceButton("Calendar", page: "Calendar")
+                            workspaceButton("Goals", page: "Goals")
+                            workspaceButton("Recovery", page: "Recovery")
                             workspaceButton("Health", page: "Health")
                             workspaceButton("Compare", page: "Compare")
                             workspaceButton("Map", page: "Map")
@@ -176,7 +180,10 @@ struct HubView: View {
                 Rectangle().fill(HubTheme.line).frame(height: 1)
                 if page == "Home" {
                     HomeView(model: model, navigate: { page = $0 }, openActivity: { model.selectedID = $0; page = "Activities" })
-                } else if page == "Health" { HealthMetricsView(model: model) }
+                } else if page == "Calendar" { TrainingCalendarView(groups: model.groups) { model.selectedID = $0; page = "Activities" } }
+                else if page == "Goals" { TrainingProgressView(activities: model.activities, store: model.store) { model.selectedID = $0; page = "Activities" } }
+                else if page == "Recovery" { RecoveryTrendsView(model: model) }
+                else if page == "Health" { HealthMetricsView(model: model) }
                 else if page == "Compare" { ActivityComparisonView(groups: model.groups, preferredID: model.selectedGroup?.id, store: model.store) { model.selectedID = $0; page = "Activities" } }
                 else if page == "Map" {
                     if let store = model.store {
@@ -196,7 +203,7 @@ struct HubView: View {
                                        selectActivity: { model.selectedID = $0 }, openRoute: {
                             routeFocus = model.selectedGroup?.id ?? activity.id
                             page = "Map"
-                        }).id(activity.id)
+                        }, guidedSection: tourStep.flatMap { tourNeedsRecording($0) ? nil : $0.section }).id(activity.id)
                     } else {
                         ContentUnavailableView {
                             Label(model.activities.isEmpty ? "Start with one activity" : visibleGroups.isEmpty ? "No matching activities" : "Choose an activity", systemImage: "chart.xyaxis.line")
@@ -218,7 +225,13 @@ struct HubView: View {
                     Label("Local processing", systemImage: "lock.shield").font(.caption).foregroundStyle(.secondary)
                 }
             }.padding(.horizontal, 24).padding(.vertical, 14)
-                .background(HubTheme.paper)
+                .background(HubTheme.background)
+                .overlay(alignment: .bottomTrailing) {
+                    if let tourStep {
+                        GuidedAppTourCard(step: tourStep, missingRecording: tourNeedsRecording(tourStep), move: moveTour, finish: { self.tourStep = nil }, explore: showTourStep)
+                            .frame(maxWidth: 650).padding(16).padding(.bottom, 28)
+                    }
+                }
         }
         .foregroundStyle(HubTheme.ink)
         .tint(HubTheme.accent)
@@ -255,10 +268,11 @@ struct HubView: View {
         .sheet(isPresented: $showingWalkthrough) {
             WalkthroughView(model: model, reason: welcomeReason) { destination in
                 showingWalkthrough = false
-                if let destination { openWorkspace(destination) }
+                if destination == "Live tour" { showTourStep(.home) }
+                else if let destination { openWorkspace(destination) }
             }
         }
-        .alert("Training Hub", isPresented: Binding(get: { model.error != nil }, set: { if !$0 { model.error = nil } })) {
+        .alert("GarHub", isPresented: Binding(get: { model.error != nil }, set: { if !$0 { model.error = nil } })) {
             Button("OK") { model.error = nil }
         } message: { Text(model.error ?? "") }
         .sheet(isPresented: $showRename) {
@@ -289,7 +303,7 @@ struct HubView: View {
             now: now
         )
         walkthroughLastUse = now.timeIntervalSince1970
-        if let reason, !showingWalkthrough {
+        if let reason, !showingWalkthrough, tourStep == nil {
             walkthroughRelease = release.isEmpty ? "development" : release
             welcomeReason = reason
             showingWalkthrough = true
@@ -325,7 +339,7 @@ struct HubView: View {
         }
         .padding(16)
         .frame(width: 450, alignment: .leading)
-        .background(HubTheme.paper)
+        .background(HubTheme.background)
     }
 
     private func workspaceButton(_ title: String, page destination: String) -> some View {
@@ -335,9 +349,9 @@ struct HubView: View {
                 Text(title)
                 if isNew {
                     Text("NEW").font(.system(size: 8, weight: .bold)).tracking(0.35)
-                        .foregroundStyle(HubTheme.forest)
+                        .foregroundStyle(HubTheme.boardBackground)
                         .padding(.horizontal, 4).padding(.vertical, 2)
-                        .background(HubTheme.lime, in: Capsule())
+                        .background(HubTheme.plotPrimary, in: Capsule())
                         .accessibilityHidden(true)
                 }
             }
@@ -345,6 +359,36 @@ struct HubView: View {
         .buttonStyle(HubPillStyle(selected: page == destination))
         .accessibilityLabel(isNew ? "\(title), new" : title)
         .accessibilityAddTraits(page == destination ? .isSelected : [])
+        .overlay(RoundedRectangle(cornerRadius: 9).strokeBorder(tourStep?.page == destination ? HubTheme.accent : .clear, lineWidth: 2).allowsHitTesting(false))
+    }
+
+    private func tourNeedsRecording(_ step: AppTourStep) -> Bool {
+        switch step {
+        case .charts, .laps, .zones, .stats: return model.selections.isEmpty
+        case .pool: return !model.selections.contains { $0.sport == "swimming" && $0.subSport == "lapSwimming" }
+        case .performance: return !model.selections.contains { $0.sessionIndex >= 0 && ["running", "cycling"].contains($0.sport) }
+        case .route: return !model.selections.contains { $0.sessionIndex >= 0 && $0.isOutdoorRouteCandidate && ($0.distance ?? 0) > 0 }
+        default: return false
+        }
+    }
+    private func moveTour(_ offset: Int) {
+        guard let current = tourStep, let next = AppTourStep(rawValue: current.rawValue + offset) else { return }
+        showTourStep(next)
+    }
+    private func showTourStep(_ step: AppTourStep) {
+        if step.section != nil {
+            let eligible = model.selections.filter { activity in
+                switch step {
+                case .pool: return activity.sport == "swimming" && activity.subSport == "lapSwimming"
+                case .performance: return activity.sessionIndex >= 0 && ["running", "cycling"].contains(activity.sport)
+                case .route: return activity.sessionIndex >= 0 && activity.isOutdoorRouteCandidate && (activity.distance ?? 0) > 0
+                default: return true
+                }
+            }
+            if !eligible.contains(where: { $0.id == model.selectedID }) { model.selectedID = eligible.first?.id }
+        }
+        tourStep = step
+        page = step.page
     }
 
     private func openWorkspace(_ destination: String) {

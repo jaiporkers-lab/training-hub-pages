@@ -6,6 +6,8 @@
 - Apple Maps can receive the area you view when the street basemap is on. Route drawing and inspection run locally. You can turn the basemap off in Map or during welcome setup. [Apple Maps privacy](https://www.apple.com/legal/privacy/data/en/apple-maps/)
 - The prompt builder shows the text before copying and leaves health data out unless selected. Sensor CSVs omit GPS.
 
+Calendar plans, goals, custom layouts and FTP settings are local preferences and are included in library backups. Plan decoding validates bounded counts, unique identifiers, titles and durations. Analysis does not send samples or health values to an AI service. The public website stores only the chosen theme in browser storage; its activity illustrations are fictional.
+
 The project has automated regression tests and manual checks. It has had no independent security audit. The local build uses ad-hoc signing. Check the [build guide](docs/BUILDING.md) for packaging details.
 
 For security reports, contact the repository owner privately. For ordinary bug reports, share the app version, macOS version and synthetic reproduction steps. Keep keys, activity files, backups, GPS locations and diagnostic logs with personal information out of public issues.

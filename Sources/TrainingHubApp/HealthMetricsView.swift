@@ -87,8 +87,8 @@ private struct HealthDailyChart: View {
         HubChartBoard(title: metric.title, subtitle: "Daily measurements") {
             Chart {
                 ForEach(data) { point in
-                    LineMark(x: .value("Date", point.date), y: .value(metric.unit, point.value), series: .value("Recorded span", point.segment)).foregroundStyle(HubTheme.lime)
-                    PointMark(x: .value("Date", point.date), y: .value(metric.unit, point.value)).foregroundStyle(HubTheme.lime)
+                    LineMark(x: .value("Date", point.date), y: .value(metric.unit, point.value), series: .value("Recorded span", point.segment)).foregroundStyle(HubTheme.plotPrimary)
+                    PointMark(x: .value("Date", point.date), y: .value(metric.unit, point.value)).foregroundStyle(HubTheme.plotPrimary)
                 }
             }
             .chartYScale(domain: .automatic(includesZero: false))

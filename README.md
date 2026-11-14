@@ -1,22 +1,35 @@
-# Training Hub for macOS
+# GarHub for macOS
 
-Training Hub is a local-first SwiftUI training log. Import an original FIT recording or connect your own Garmin account, then inspect the activity, compare efforts, or explore your outdoor routes on a heatmap.
+GarHub is a local-first SwiftUI companion for Garmin recordings. Import original FIT files or connect your own Garmin account, then inspect any supported activity, compare efforts, plan your training and explore outdoor routes. Running, cycling, swimming, hiking, strength and multisport recordings share one library. Available analysis depends on the fields your device records.
 
-[Project website](https://jaiporkers-lab.github.io/training-hub-pages/) · [Build and test](docs/BUILDING.md) · [Changelog](CHANGELOG.md) · [Security and privacy](SECURITY.md)
+[Website & download](https://jaiporkers-lab.github.io/training-hub-pages/) · [Build and test](docs/BUILDING.md) · [Changelog](CHANGELOG.md) · [Security and privacy](SECURITY.md) · [Feature guide](docs/FEATURES.md)
 
 ## What you can do
 
-- Open a whole triathlon or inspect its swim, bike, run and transitions individually.
-- Inspect charts by time or distance, analyse laps and zones, and compare activities or matched race legs. View original FIT statistics and individual pool lengths when recorded.
-- Explore the outdoor heatmap. Hover to count nearby recordings, then click a spot to open an activity from the list. Indoor and virtual routes are excluded.
-- Customise Home and the activity feed, compare training volume and supported health metrics, and create local backups or CSV exports.
-- Prepare a coaching brief locally. Copy it yourself when you want to use it in a chat.
+- Inspect fast hover charts, laps, custom zones and original FIT statistics. Expand multisport recordings into individual legs. Review pool lengths, rests, strokes and SWOLF when recorded.
+- Compare activities and matched multisport legs by time or distance, with simultaneous cursor readouts.
+- Analyse running kilometre splits, steady-section HR drift with coverage checks, and best distance efforts.
+- Review cycling power curves from 5 seconds to 60 minutes, excluding recording gaps. Set your own FTP for percentages.
+- Plan workouts and race dates on a weekly calendar, drag to reschedule, and open completed activities beside them.
+- Set weekly time/distance goals and a library distance milestone. Scan local recordings for running and cycling best efforts.
+- Explore a personal outdoor heatmap over an optional Apple Maps basemap. Hover to count nearby activities, pin a location and open a recording. Indoor and virtual sessions are excluded.
+- Colour individual routes by HR, pace, power or elevation. Inspect elevation profiles and detected climbs, find approximately matching routes and compare profiles.
+- Align training and health history. Review 7-day rolling trends, recent versus preceding averages and descriptive same-day or next-day associations, with coverage counts.
+- Use Home presets for running, cycling, swimming, triathlon and recovery, or save your own card/sport layout.
+- Follow the live in-app tour, including the new features, and replay it from the toolbar. Connect Garmin or import files during welcome setup.
+- Export CSVs, create verified local backups, and prepare a coaching brief locally. The app makes no AI calls.
 
 ## Get started
 
-Download the [Apple silicon disk image](https://jaiporkers-lab.github.io/training-hub-pages/downloads/Training-Hub-0.8.6-arm64.dmg) for macOS 14 or later, then drag Training Hub into Applications. The build is ad-hoc signed and has no Apple notarisation. See [download checksums](downloads/SHA256SUMS.txt).
+Download the [Apple silicon disk image](https://jaiporkers-lab.github.io/training-hub-pages/downloads/GarHub-0.9.0-arm64.dmg) for macOS 14 or later and drag **GarHub** into Applications. The build is ad-hoc signed and is not Apple-notarised. See [checksums](downloads/SHA256SUMS.txt) and the [installation notes](docs/BUILDING.md).
 
-Build the app on a Mac with Xcode and Swift 6. The package targets macOS 14 or later. Swift Package Manager fetches the pinned dependencies from their upstream repositories.
+On the welcome screen, connect your own Garmin account or continue to FIT import. The Garmin Personal API settings link explains how to create a key. Paste it in **Personal API key**, then choose **Save & test connection**. GarHub verifies it with Garmin and stores it in macOS Keychain. You can do this later in **Settings → Garmin**. Availability is controlled by Garmin. [Garmin Personal API FAQ](https://developer.garmin.com/gc-developer-program/personal/personal-faq)
+
+After setup, **Start live app tour** opens each working section with guidance beneath it. You can interact with the app, go back, end the tour or revisit the section. Empty libraries receive guidance without fabricated activities.
+
+## Build from source
+
+Use a Mac with Xcode and Swift 6. Swift Package Manager fetches the pinned dependencies from their upstream repositories.
 
 ```sh
 swift test --build-system native
@@ -24,18 +37,17 @@ zsh scripts/build-app.sh
 zsh scripts/build-dmg.sh
 ```
 
-The last command makes a disk image for local use beside the checkout. See the [build guide](docs/BUILDING.md) for exact output paths and packaging requirements.
-
-On the welcome screen, choose **Import FIT** during setup or connect your own Garmin account. To connect, open the Garmin Personal API settings link, sign in, create a key, then paste it into **Personal API key** and choose **Save & test connection**. Training Hub verifies it with Garmin and stores it in macOS Keychain. You can also do this later in **Settings → Garmin**. [Garmin Personal API FAQ](https://developer.garmin.com/gc-developer-program/personal/personal-faq)
+The scripts produce `../GarHub.zip` and `../GarHub-<version>-<architecture>.dmg`. See the [build guide](docs/BUILDING.md) for complete instructions.
 
 ## Repository guide
 
 | Path | Contents |
 | --- | --- |
-| [Sources/TrainingHubApp](Sources/TrainingHubApp) | SwiftUI screens, onboarding, map and chart interaction |
-| [Sources/TrainingHubCore](Sources/TrainingHubCore) | FIT import, SQLite library, Garmin sync and local analysis |
-| [Tests](Tests) | Synthetic fixtures and regression tests |
-| [docs](docs) | Build guide and architecture |
+| [Sources/TrainingHubApp](Sources/TrainingHubApp) | SwiftUI screens, onboarding, maps and chart interaction |
+| [Sources/TrainingHubCore](Sources/TrainingHubCore) | FIT import, SQLite, Garmin sync and local analysis |
+| [Tests](Tests) | Synthetic fixtures and regression checks |
+| [docs](docs) | Build guide, feature guide and architecture |
 | [scripts](scripts) | App, disk-image and icon packaging |
+| [index.html](index.html) | Public website; no training-data backend |
 
-Training Hub is an independent, AI-assisted personal project. This repository contains the project source and references upstream dependencies. It is not affiliated with Garmin. Read the [third-party notices](THIRD_PARTY_NOTICES.md) before distributing a build.
+GarHub is an independent, vibe-coded personal project. It is not affiliated with or certified by Garmin and has not had an independent security audit. The source and checks are provided for inspection; they are not a security guarantee. Read the [third-party notices](THIRD_PARTY_NOTICES.md) before distributing a build. The project has not selected an open-source licence; public source visibility does not itself grant reuse rights beyond applicable terms.

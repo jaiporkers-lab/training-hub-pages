@@ -69,16 +69,16 @@ struct HubSettings: View {
                 Text("Appearance").hubHeading()
                 Picker("Appearance", selection: $appearance) {
                     ForEach(HubAppearance.allCases, id: \.self) { option in
-                        Text(option.rawValue).tag(option)
+                        Text(option.title).tag(option)
                     }
                 }.pickerStyle(.segmented).frame(maxWidth: 400)
-                Text("Paper uses the cream palette from the project page. Forest-green charts keep the same appearance in every mode.")
+                Text("Choose Light, Dark or Match Mac. Blue charts and the same controls are available in every mode.")
                     .foregroundStyle(HubTheme.muted)
                 Spacer(minLength: 0)
             }
             .padding(24)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .background(HubTheme.paper)
+            .background(HubTheme.background)
             .tabItem { Label("Appearance", systemImage: "circle.lefthalf.filled") }
         }
         .padding(8)
@@ -135,7 +135,7 @@ struct GarminConnectionSetup: View {
             }.disabled(model.testingConnection || model.syncing || model.healthSyncing)
             Text(model.connectionStatus).font(.callout).textSelection(.enabled)
             if showsInstructions {
-                Label("Training Hub verifies your key with Garmin and saves it in macOS Keychain.", systemImage: "lock.shield")
+                Label("GarHub verifies your key with Garmin and saves it in macOS Keychain.", systemImage: "lock.shield")
                     .font(.caption).foregroundStyle(HubTheme.muted)
             }
         }

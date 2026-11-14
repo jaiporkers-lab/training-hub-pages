@@ -2,7 +2,7 @@ import SwiftUI
 import TrainingHubCore
 
 enum DetailSection: String, CaseIterable, Identifiable {
-    case charts = "Charts", laps = "Laps & splits", zones = "Zones", overview = "Overview", stats = "All stats", lengths = "Pool lengths"
+    case charts = "Charts", performance = "Performance", route = "Route", laps = "Laps & splits", zones = "Zones", overview = "Overview", stats = "All stats", lengths = "Pool lengths"
     var id: String { rawValue }
 }
 

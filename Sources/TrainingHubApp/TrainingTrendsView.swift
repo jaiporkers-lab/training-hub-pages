@@ -75,7 +75,7 @@ private struct WeeklyTrendChart: View {
             VStack(alignment: .leading, spacing: 8) {
                 Chart(weeks) { week in
                     BarMark(x: .value("Week", week.start, unit: .weekOfYear), y: .value(showDistance ? "km" : "hours", value(week.current)))
-                        .foregroundStyle(HubTheme.lime)
+                        .foregroundStyle(HubTheme.plotPrimary)
                     LineMark(x: .value("Week", week.start, unit: .weekOfYear), y: .value("Previous", value(week.previous)))
                         .foregroundStyle(HubTheme.comparison).lineStyle(StrokeStyle(lineWidth: 2, dash: [4, 3]))
                         .symbol(.circle)

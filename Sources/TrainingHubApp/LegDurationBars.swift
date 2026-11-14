@@ -15,7 +15,7 @@ struct LegDurationBars: View {
         HubChartBoard(title: "Leg durations", subtitle: timerBasis ? "Recorded timer" : "Elapsed time") {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 16) {
-                    Label("Selected", systemImage: "circle.fill").foregroundStyle(HubTheme.lime)
+                    Label("Selected", systemImage: "circle.fill").foregroundStyle(HubTheme.plotPrimary)
                     Label("Baseline", systemImage: "circle.fill").foregroundStyle(HubTheme.comparison)
                 }.font(.caption)
                 ForEach(legs) { leg in
@@ -23,7 +23,7 @@ struct LegDurationBars: View {
                         Text(leg.title).font(.callout.weight(.semibold))
                             .frame(width: 96, alignment: .leading)
                         VStack(spacing: 4) {
-                            bar("Selected", time: seconds(leg.selected), maximum: maximum, color: HubTheme.lime)
+                            bar("Selected", time: seconds(leg.selected), maximum: maximum, color: HubTheme.plotPrimary)
                             bar("Baseline", time: seconds(leg.baseline), maximum: maximum, color: HubTheme.comparison)
                         }
                     }

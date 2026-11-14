@@ -4,10 +4,10 @@ HUB_PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 HUB_BUILD_DIR="${TRAINING_HUB_BUILD_DIR:-$HUB_PROJECT_DIR/build}"
 HUB_CACHE_DIR="${TRAINING_HUB_CACHE_DIR:-$HUB_BUILD_DIR/cache}"
 HUB_CONFIG_DIR="${TRAINING_HUB_CONFIG_DIR:-$HUB_BUILD_DIR/config}"
-HUB_OUTPUT_ZIP="$HUB_PROJECT_DIR/../Garmin Training Hub.zip"
+HUB_OUTPUT_ZIP="$HUB_PROJECT_DIR/../GarHub.zip"
 HUB_STAGE_DIR="$(mktemp -d /private/tmp/training-hub-package.XXXXXX)"
 trap 'rm -rf "$HUB_STAGE_DIR"' EXIT
-HUB_APP="$HUB_STAGE_DIR/Garmin Training Hub.app"
+HUB_APP="$HUB_STAGE_DIR/GarHub.app"
 export CLANG_MODULE_CACHE_PATH="$HUB_BUILD_DIR/module-cache"
 export SWIFTPM_MODULECACHE_OVERRIDE="$HUB_BUILD_DIR/module-cache"
 swift build --package-path "$HUB_PROJECT_DIR" --scratch-path "$HUB_BUILD_DIR" --cache-path "$HUB_CACHE_DIR" --config-path "$HUB_CONFIG_DIR" --disable-sandbox --build-system native -c release --product GarminTrainingHub

@@ -45,7 +45,7 @@ struct OfflineHeatmap: View {
                     }
                     if let point = inspection.pin?.point, let viewport {
                         let wrappedX = point.x + (viewport.midX - point.x).rounded()
-                        Circle().strokeBorder(HubTheme.lime, lineWidth: 2)
+                        Circle().strokeBorder(HubTheme.plotPrimary, lineWidth: 2)
                             .background(.black.opacity(0.25), in: Circle())
                             .frame(width: 17, height: 17)
                             .position(x: (wrappedX - viewport.minX) / viewport.width * geometry.size.width + drag.width,
@@ -100,7 +100,7 @@ struct OfflineHeatmap: View {
                     frame = PaintedFrame(viewport: request, image: image)
                 }
             }
-        }.background(HubTheme.forest)
+        }.background(HubTheme.boardBackground)
     }
 
     private struct PaintedFrame {
