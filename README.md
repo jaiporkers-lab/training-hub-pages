@@ -17,7 +17,8 @@ GarHub is a local-first SwiftUI companion for Garmin recordings. Import original
 - Align training and health history. Review 7-day rolling trends, recent versus preceding averages and descriptive same-day or next-day associations, with coverage counts.
 - Use Home presets for running, cycling, swimming, triathlon and recovery, or save your own card/sport layout.
 - Follow the live in-app tour, including the new features, and replay it from the toolbar. Connect Garmin or import files during welcome setup.
-- Export CSVs, create verified local backups, and prepare a coaching brief locally. The app makes no AI calls.
+- Export CSVs, create verified local backups, and prepare a coaching brief locally.
+- Optionally enable **Settings → On-device AI** for comparison highlights. AI is off by default, runs only on this Mac and selects verified facts; there are no AI API charges or cloud fallbacks. Requires macOS 26+ and an available Apple on-device model. [Details and current scope](docs/ON-DEVICE-AI.md)
 
 ## Get started
 
@@ -29,7 +30,7 @@ After setup, **Start live app tour** opens each working section with guidance be
 
 ## Build from source
 
-Use a Mac with Xcode and Swift 6. Swift Package Manager fetches the pinned dependencies from their upstream repositories.
+Use a Mac with Xcode and Swift 6. The on-device AI adapter uses the Foundation Models SDK in Xcode 26 or later; the app keeps its macOS 14 baseline. Older SDK builds omit that adapter. Swift Package Manager fetches the pinned dependencies from their upstream repositories.
 
 ```sh
 swift test --build-system native

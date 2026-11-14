@@ -5,8 +5,10 @@
 - Backup restore validates a privately staged database and its originals before replacement. Backup hashes detect file changes. Backup folders and exports should be kept private.
 - Apple Maps can receive the area you view when the street basemap is on. Route drawing and inspection run locally. You can turn the basemap off in Map or during welcome setup. [Apple Maps privacy](https://www.apple.com/legal/privacy/data/en/apple-maps/)
 - The prompt builder shows the text before copying and leaves health data out unless selected. Sensor CSVs omit GPS.
+- Optional comparison highlights use only Apple's explicit on-device `SystemLanguageModel`, with default guardrails and no tools or cloud fallback. They are off by default and require an explicit request. Settings → On-device AI turns the feature on or off; off cancels work and clears its result. No API key or AI API charges are involved.
+- The model receives bounded, app-authored time/distance facts. It can select only fact IDs, which are validated before app-authored wording is displayed. Activity titles, notes, routes, raw samples, health values and credentials are excluded. There is no transcript logging, feedback upload, persistent result cache or model training.
 
-Calendar plans, goals, custom layouts and FTP settings are local preferences and are included in library backups. Plan decoding validates bounded counts, unique identifiers, titles and durations. Analysis does not send samples or health values to an AI service. The public website stores only the chosen theme in browser storage; its activity illustrations are fictional.
+Calendar plans, goals, custom layouts and FTP settings are local preferences and are included in library backups. The AI opt-in is a per-Mac preference, excluded from backups. Plan decoding validates bounded counts, unique identifiers, titles and durations. Analysis does not send samples or health values to an AI service. The public website stores only the chosen theme in browser storage; its activity illustrations are fictional. See [on-device AI boundaries](docs/ON-DEVICE-AI.md).
 
 The project has automated regression tests and manual checks. It has had no independent security audit. The local build uses ad-hoc signing. Check the [build guide](docs/BUILDING.md) for packaging details.
 

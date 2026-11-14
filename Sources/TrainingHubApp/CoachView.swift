@@ -16,7 +16,7 @@ struct CoachView: View {
                     HubEyebrow("Coaching brief", color: HubTheme.accent)
                     Text("Prompt builder").hubHeading()
                 }
-                Text("Prepare and review a compact summary, then copy it into your preferred ChatGPT conversation. Nothing is sent automatically, and this app makes no AI API calls.").foregroundStyle(.secondary)
+                Text("Prepare and review a compact summary, then copy it for your own use. Nothing is sent automatically. This builder makes no model requests; optional on-device comparison highlights are controlled in Settings.").foregroundStyle(.secondary)
                 TextField("Your goal, target race, and available training time", text: $goal, axis: .vertical)
                     .textFieldStyle(.roundedBorder).lineLimit(2...4)
                 Toggle("Include selected health averages and recorded coverage", isOn: $includeHealth)

@@ -15,9 +15,11 @@ let package = Package(
         .systemLibrary(name: "CSQLite"),
         .systemLibrary(name: "CZlib"),
         .target(name: "TrainingHubCore", dependencies: ["CSQLite", "CZlib", .product(name: "FITSwiftSDK", package: "fit-swift-sdk")]),
-        .executableTarget(name: "TrainingHubApp", dependencies: ["TrainingHubCore"]),
+        .target(name: "TrainingHubIntelligence", dependencies: ["TrainingHubCore"]),
+        .executableTarget(name: "TrainingHubApp", dependencies: ["TrainingHubCore", "TrainingHubIntelligence"]),
         .executableTarget(name: "HubCheck", dependencies: ["TrainingHubCore"]),
-        .testTarget(name: "TrainingHubCoreTests", dependencies: ["TrainingHubCore", "CSQLite", "CZlib", .product(name: "FITSwiftSDK", package: "fit-swift-sdk")])
+        .testTarget(name: "TrainingHubCoreTests", dependencies: ["TrainingHubCore", "CSQLite", "CZlib", .product(name: "FITSwiftSDK", package: "fit-swift-sdk")]),
+        .testTarget(name: "TrainingHubIntelligenceTests", dependencies: ["TrainingHubIntelligence", "TrainingHubCore"])
     ],
     swiftLanguageModes: [.v6]
 )

@@ -1,6 +1,6 @@
 # Architecture
 
-GarHub has a SwiftUI presentation target and a core library. Both run on the Mac.
+GarHub has a SwiftUI presentation target, a deterministic core library and an optional on-device intelligence module. All run on the Mac.
 
 | Component | Responsibility |
 | --- | --- |
@@ -13,5 +13,6 @@ GarHub has a SwiftUI presentation target and a core library. Both run on the Mac
 | Plans and layouts | Bounded Codable preferences for local calendar plans and Home presets. Calendar settings are included in backup preferences. |
 | Recovery | Completed-day training/health alignment, available-day rolling means and descriptive correlations. |
 | Backups | Snapshots SQLite and originals, verifies hashes and schema on restore, and saves a recovery backup before replacement. |
+| On-device highlights | Model-free core builds bounded comparison evidence. `TrainingHubIntelligence` explicitly selects Apple's local system model and validates returned fact IDs. SwiftUI displays only app-authored facts and limitations. |
 
-There is no hosted activity database, background analytics service or built-in AI model call. For network and data boundaries, see [Security and privacy](../SECURITY.md).
+There is no hosted activity database or background analytics service. Optional on-device AI is off by default and runs only on explicit request. Its module has no remote providers or network tools. The normal app remains usable on macOS 14 and when the model is unavailable. For network and data boundaries, see [Security and privacy](../SECURITY.md).

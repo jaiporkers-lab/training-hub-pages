@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Added an optional Settings → On-device AI switch, off by default, and verified comparison highlights using Apple's explicitly on-device model on eligible macOS 26+ systems.
+- Kept calculations and wording deterministic, with mandatory missing-data and comparison limitations, cancellation, a 20-second deadline and local fallbacks. No cloud AI, AI API charges, health assessment or medical/training advice is included.
+- Preserved the macOS 14 baseline and the existing stable download while the feature is tested from source.
+
 ## 0.9.0
 
 - Added a bottom-left Report an issue link to the project’s GitHub issues page.

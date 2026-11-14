@@ -1,14 +1,17 @@
 import SwiftUI
 import AppKit
 import TrainingHubCore
+import TrainingHubIntelligence
 
 @main
 struct TrainingHubApp: App {
     @StateObject private var model = HubModel()
+    @StateObject private var intelligence = LocalIntelligence()
     @AppStorage("appearance.mode") private var appearance = HubAppearance.system
     var body: some Scene {
         WindowGroup {
             HubView(model: model)
+                .environmentObject(intelligence)
                 .frame(minWidth: 1_040, minHeight: 680)
                 .preferredColorScheme(appearance.scheme)
                 .task { await model.start() }
@@ -16,6 +19,7 @@ struct TrainingHubApp: App {
         .defaultSize(width: 1_240, height: 800)
         Settings {
             HubSettings(model: model).frame(width: 650, height: 590)
+                .environmentObject(intelligence)
                 .preferredColorScheme(appearance.scheme)
         }
     }
@@ -27,7 +31,7 @@ final class HubModel: ObservableObject {
     @Published var selectedID: String?
     @Published var busy = false
     @Published var error: String?
-    @Published var status = "Local storage · No AI calls"
+    @Published var status = "Local storage · On-device AI is optional in Settings"
     @Published var keyAvailable = false
     @Published var connectionStatus = "Add a Garmin Personal API key to connect."
     @Published var testingConnection = false
@@ -58,7 +62,7 @@ final class HubModel: ObservableObject {
         started = true
         do {
             let override = ProcessInfo.processInfo.environment["TRAINING_HUB_DATA_DIR"]
-            let root = override.map { URL(fileURLWithPath: $0) } ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("GarminTrainingHub")
+            let root = override.map { URL(fileURLWithPath: $0) } ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent(AppStorageIdentity.libraryDirectory())
             store = try ActivityStore(root: root)
             do {
                 if let recovery = try await store?.removeDemoActivities(preferences: preferencesData()) {
