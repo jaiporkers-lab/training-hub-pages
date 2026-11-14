@@ -3,7 +3,7 @@ import Security
 import LocalAuthentication
 
 public enum GarminKeychain {
-    private static let service = "local.traininghub.mac.garmin-personal-api"
+    private static let service = AppStorageIdentity.garminKeychainService()
     private static var query: [String: Any] { [kSecClass as String: kSecClassGenericPassword, kSecAttrService as String: service, kSecAttrAccount as String: "personal-api-key"] }
     public static func hasKey() throws -> Bool {
         var values = query
