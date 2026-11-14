@@ -47,7 +47,7 @@ struct HealthMetricsView: View {
                 if metricID.hasPrefix("bb") { Text("Garmin Body Battery scale: 5–100 points.").font(.caption).foregroundStyle(.secondary) }
                 if metricID == "rhr" { Text("Garmin may supply the day's minimum when a resting value is unavailable.").font(.caption).foregroundStyle(.secondary) }
                 if let updated = model.health.updated { Text("Latest local update: \(updated.formatted())").font(.caption).foregroundStyle(.secondary) }
-                Text("Sync fetches only the two comparison periods in batches of at most 31 days. Measurements stay in your local SQLite library and its backups. This app makes no AI calls.")
+                Text("Sync fetches only the two comparison periods in batches of at most 31 days. Measurements stay in your local SQLite library and its backups. Health measurements are not included in on-device AI highlights.")
                     .font(.caption).foregroundStyle(.secondary)
             }.padding(.vertical, 8)
         }

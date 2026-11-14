@@ -1,7 +1,9 @@
 import SwiftUI
 import TrainingHubCore
+import TrainingHubIntelligence
 
 struct ActivityComparisonView: View {
+    @EnvironmentObject private var intelligence: LocalIntelligence
     let groups: [ActivityGroup]
     let preferredID: String?
     let store: ActivityStore?
@@ -88,6 +90,9 @@ struct ActivityComparisonView: View {
                         .hubPanel(padding: 18)
                     Text("Legs are matched by sport and occurrence (including T1/T2). Unmatched legs and missing timer/distance values remain unavailable. Elapsed time includes pauses; timer values are shown only when recorded.")
                         .font(.caption).foregroundStyle(.secondary)
+                    if intelligence.enabled {
+                        ComparisonInsightPanel(evidence: .comparison(selected: selected, baseline: baseline, basis: timerBasis ? .timer : .elapsed))
+                    }
                     HStack {
                         Button("Open selected activity") { openActivity(lhs.id) }
                         Button("Open baseline activity") { openActivity(rhs.id) }

@@ -64,6 +64,7 @@ struct HubSettings: View {
                         .font(.caption).foregroundStyle(.secondary)
                 }.padding(24)
             }.tabItem { Label("Library", systemImage: "externaldrive") }
+            LocalAISettingsView().tabItem { Label("On-device AI", systemImage: "sparkles") }
             VStack(alignment: .leading, spacing: 16) {
                 HubEyebrow("Personal workspace", color: HubTheme.accent)
                 Text("Appearance").hubHeading()
