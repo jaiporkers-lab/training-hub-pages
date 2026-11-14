@@ -16,6 +16,8 @@ zsh scripts/build-dmg.sh
 
 The default tests use isolated libraries and synthetic activities. Tests for original files are optional. To run them, set `TRAINING_HUB_TEST_FIT`, `TRAINING_HUB_TEST_ZIP` or `TRAINING_HUB_TEST_POOL` to your own reproduction files. Keep those recordings outside the repository.
 
+For the optional on-device AI feature, use Xcode 26 or later. `zsh scripts/build-ai-preview.sh` creates a separate **GarHub AI Preview** app with its own library, preferences and Garmin credential service, leaving the installed stable app untouched. AI defaults to off. See [feature scope and validation](ON-DEVICE-AI.md). An SDK without FoundationModels omits the adapter; `-Xswiftc -DGARHUB_NO_ON_DEVICE_AI` explicitly compiles it out.
+
 `swift run --build-system native hub-check /tmp/training-hub-check` exercises the import and storage pipeline with generated fixtures. For app development with an isolated library, set `TRAINING_HUB_DATA_DIR` to an empty directory when launching the executable. Garmin credentials are managed separately by macOS Keychain.
 
 GarHub keeps the bundle identifier, executable name and `~/Library/Application Support/GarminTrainingHub` library directory from earlier versions. Updating the app does not move your training library or change the Keychain service. Quit the old app before replacing it. Keep one installed copy in Applications.
