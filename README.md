@@ -50,4 +50,10 @@ The scripts produce `../GarHub.zip` and `../GarHub-<version>-<architecture>.dmg`
 | [scripts](scripts) | App, disk-image and icon packaging |
 | [index.html](index.html) | Public website; no training-data backend |
 
-GarHub is an independent, vibe-coded personal project. It is not affiliated with or certified by Garmin and has not had an independent security audit. The source and checks are provided for inspection; they are not a security guarantee. Read the [third-party notices](THIRD_PARTY_NOTICES.md) before distributing a build. The project has not selected an open-source licence; public source visibility does not itself grant reuse rights beyond applicable terms.
+GarHub is an independent, vibe-coded personal project. It is not affiliated with or certified by Garmin and has not had an independent security audit. The source and checks are provided for inspection; they are not a security guarantee. Read the [third-party notices](THIRD_PARTY_NOTICES.md) before distributing a build.
+
+## Licence
+
+GarHub’s original code and documentation are licensed under the [MIT License](LICENSE). You may use, modify and redistribute that code, including commercially, provided you retain the copyright and licence notice. It is supplied without warranty.
+
+Third-party components keep their own licences; the MIT licence does not relicense Garmin’s FIT SDK, Swift Collections or other upstream material. Review [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) before redistributing a build. Licensing does not imply an independent security audit or Garmin endorsement.

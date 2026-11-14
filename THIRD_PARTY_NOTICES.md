@@ -4,4 +4,4 @@
 - [Swift Collections](https://github.com/apple/swift-collections) is an upstream dependency with its own [licence](https://github.com/apple/swift-collections/blob/main/LICENSE.txt). Its licence notice is included with local builds.
 - The street basemap is supplied by Apple Maps. Garmin Connect and Apple Maps are third-party services with their own terms.
 
-The repository publishes Training Hub’s source. A separate licence for redistribution of the project’s own code has not been selected.
+GarHub’s original code and documentation are licensed under the [MIT License](LICENSE). This licence does not replace or modify the licences of third-party components listed above. In particular, Garmin’s FIT SDK remains subject to its FIT Protocol License Agreement.
