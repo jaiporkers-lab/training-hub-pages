@@ -2,6 +2,8 @@
 
 ## 0.9.0
 
+- Added a bottom-left Report an issue link to the project’s GitHub issues page.
+
 - Renamed the app and site GarHub, with approved GarHub/GH branding and blue/grey light and dark appearances. Existing library and credentials keep their original locations.
 - Added running splits, HR drift, covered steady-section comparisons and distance best efforts.
 - Added cycling power-duration curves and configurable FTP percentages.

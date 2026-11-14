@@ -145,6 +145,10 @@ struct HubView: View {
                     }
                 Text((Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String).map { "Version \($0) · Data stays on this Mac" } ?? "Data stays on this Mac")
                     .font(.caption2).foregroundStyle(.secondary)
+                Link(destination: URL(string: "https://github.com/jaiporkers-lab/training-hub-pages/issues")!) {
+                    Label("Report an issue", systemImage: "bubble.left.and.exclamationmark.bubble.right")
+                }.font(.caption).buttonStyle(.link)
+                    .help("Open GarHub’s GitHub issues page. No activity data is attached automatically.")
             }.padding(.horizontal, 14).padding(.bottom, 12)
             .background(HubTheme.sidebar)
             .navigationSplitViewColumnWidth(min: 260, ideal: 290)
